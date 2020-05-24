@@ -1,45 +1,49 @@
 package com.rts.game.core;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Projectile {
-    private Vector2 position;
+public class Projectile extends GameObject implements Poolable {
     private Vector2 velocity;
     private TextureRegion texture;
-    private boolean fired;
+    private float speed;
+    private float angle;
+    private boolean active;
 
-    public boolean isFired() {
-        return fired;
+    @Override
+    public boolean isActive() {
+        return active;
     }
 
-    public Projectile(TextureAtlas atlas) {
-        this.position = new Vector2( 0, 0);
-        this.velocity = new Vector2( 0, 0);
-        this.texture = atlas.findRegion("bullet");
-        this.fired = false;
+    public void deactivate() {
+        active = false;
     }
 
-    public Vector2 getPosition() {
-        return position;
+    public Projectile(GameController gc) {
+        super(gc);
+        this.velocity = new Vector2();
+        this.speed = 320.0f;
     }
 
-    public void setFired(boolean status) {
-        fired = status;
+    public void setup(Vector2 startPosition, float angle, TextureRegion projectileTexture) {
+        this.texture = texture;
+        this.velocity.set(100.0f * MathUtils.cosDeg(angle), 100.0f * MathUtils.cosDeg(angle));
+        this.position.set(startPosition);
+        this.angle = angle;
+        this.active = true;
     }
 
-    public TextureRegion getTexture() {
-        return texture;
-    }
-
-    public void setup(Vector2 startPosition, float angle) {
-        velocity.set(100.0f * MathUtils.cosDeg(angle), 100.0f * MathUtils.cosDeg(angle));
-        position.set(startPosition);
+    public void render(SpriteBatch batch) {
+        batch.draw(texture, position.x - 8, position.y - 8);
     }
 
     public void update(float dt) {
         position.mulAdd(velocity, dt);
+        if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
+            deactivate();
+        }
     }
 }
