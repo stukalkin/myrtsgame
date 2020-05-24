@@ -52,12 +52,13 @@ public class Tank {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            if (!projectile.isFired()){
             projectile.setFired(true);
-            projectile.setup(position, angle);
+            projectile.setup(position, angle);}
         }
 
-        if (projectile.getPosition().x < 0 && projectile.getPosition().x > 1280 &&
-                projectile.getPosition().y < 0 && projectile.getPosition().y < 720) {projectile.setFired(false);}
+        if (projectile.getPosition().x < 0 || projectile.getPosition().x > 1280) {projectile.setFired(false);}
+        if (projectile.getPosition().y < 0 || projectile.getPosition().y < 720) {projectile.setFired(false);}
 
         projectile.update(dt);
         checkBounds();
@@ -80,6 +81,6 @@ public class Tank {
 
     public void render(SpriteBatch batch) {
         batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
-        if (projectile.isFired()) {batch.draw(projectile.getTexture(), getPosition().x, getPosition().y);}
+        if (projectile.isFired()) {batch.draw(projectile.getTexture(), projectile.getPosition().x, projectile.getPosition().y);}
     }
 }

@@ -35,7 +35,7 @@ public class Projectile {
     }
 
     public void setup(Vector2 startPosition, float angle) {
-        velocity.set(100.0f * MathUtils.cosDeg(angle), 0.0f);
+        velocity.set(100.0f * MathUtils.cosDeg(angle), 100.0f * MathUtils.cosDeg(angle));
         position.set(startPosition);
     }
 
