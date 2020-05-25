@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Projectile extends GameObject implements Poolable {
-    private Vector2 velocity;
     private TextureRegion texture;
+    private Vector2 velocity;
     private float speed;
     private float angle;
     private boolean active;
@@ -28,11 +28,11 @@ public class Projectile extends GameObject implements Poolable {
         this.speed = 320.0f;
     }
 
-    public void setup(Vector2 startPosition, float angle, TextureRegion projectileTexture) {
+    public void setup(Vector2 startPosition, float angle, TextureRegion texture) {
         this.texture = texture;
-        this.velocity.set(100.0f * MathUtils.cosDeg(angle), 100.0f * MathUtils.cosDeg(angle));
         this.position.set(startPosition);
         this.angle = angle;
+        this.velocity.set(speed * MathUtils.cosDeg(angle), speed * MathUtils.sinDeg(angle));
         this.active = true;
     }
 
