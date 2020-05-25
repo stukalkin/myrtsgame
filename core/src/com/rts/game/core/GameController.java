@@ -29,6 +29,7 @@ public class GameController {
     }
 
     public void update(float dt) {
+        map.setData((int)tank.position.x / 80, (int)tank.position.y / 80);
         tank.update(dt);
         projectilesController.update(dt);
         checkCollisions(dt);
