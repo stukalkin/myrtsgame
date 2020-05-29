@@ -2,6 +2,7 @@ package com.rts.game.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,7 +13,7 @@ public class Tank extends GameObject implements Poolable {
     public enum Owner {
         PLAYER, AI
     }
-
+    private BitmapFont font32;
     private Owner ownerType;
     private Weapon weapon;
     private Vector2 destination;
@@ -22,7 +23,7 @@ public class Tank extends GameObject implements Poolable {
     private float angle;
     private float speed;
     private float rotationSpeed;
-
+    private boolean selected;
     private float moveTimer;
     private float timePerFrame;
     private int container;
@@ -37,6 +38,8 @@ public class Tank extends GameObject implements Poolable {
         this.progressbarTexture = Assets.getInstance().getAtlas().findRegion("progressbar");
         this.timePerFrame = 0.08f;
         this.rotationSpeed = 90.0f;
+        this.selected = false;
+        this.font32 = Assets.getInstance().getAssetManager().get("fonts/font32.ttf");
     }
 
     public void setup(Owner ownerType, float x, float y) {
@@ -54,8 +57,18 @@ public class Tank extends GameObject implements Poolable {
     }
 
     public void update(float dt) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            if (this.position.x - Gdx.input.getX() < 30 && this.position.x - Gdx.input.getX() > -30) {
+                if (this.position.y - (720 - Gdx.input.getY()) < 30 && this.position.y - (720 - Gdx.input.getY()) > -30) {
+                selected = true;
+                }
+            } else selected = false;
+        }
+
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-            destination.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+            if (selected) {
+                destination.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+            }
         }
         if (position.dst(destination) > 3.0f) {
             float angleTo = tmp.set(destination).sub(position).angle();
@@ -94,13 +107,15 @@ public class Tank extends GameObject implements Poolable {
 
     public void updateWeapon(float dt) {
         if (weapon.getType() == Weapon.Type.HARVEST) {
-            if (gc.getMap().getResourceCount(this) > 0) {
-                int result = weapon.use(dt);
-                if (result > -1) {
-                    container += gc.getMap().harvestResource(this, result);
+            if (container < 50) {
+                if (gc.getMap().getResourceCount(this) > 0) {
+                    int result = weapon.use(dt);
+                    if (result > -1) {
+                        container += gc.getMap().harvestResource(this, result);
+                    }
+                } else {
+                    weapon.reset();
                 }
-            } else {
-                weapon.reset();
             }
         }
     }
@@ -122,6 +137,7 @@ public class Tank extends GameObject implements Poolable {
 
     public void render(SpriteBatch batch) {
         batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
+        font32.draw(batch, String.valueOf(container), position.x - 16, position.y + 16, 100, 0, false);
         if (weapon.getType() == Weapon.Type.HARVEST && weapon.getUsageTimePercentage() > 0.0f) {
             batch.setColor(0.2f, 0.2f, 0.0f, 1.0f);
             batch.draw(progressbarTexture, position.x - 32, position.y + 30, 64, 12);
