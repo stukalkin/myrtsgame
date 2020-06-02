@@ -78,7 +78,7 @@ public class Tank extends GameObject implements Poolable {
         if (MathUtils.random() < 0.5f) {
             this.weapon = new Weapon(Weapon.Type.HARVEST, 3.0f, 1);
         } else {
-            this.weapon = new Weapon(Weapon.Type.GROUND, 1.5f, 1);
+            this.weapon = new Weapon(Weapon.Type.GROUND, 1.5f, 50);
         }
         this.destination = new Vector2(position);
     }
@@ -90,7 +90,7 @@ public class Tank extends GameObject implements Poolable {
     public void update(float dt) {
         lifeTime += dt;
         // Если у танка есть цель, он пытается ее атаковать
-        if (target != null) {
+        if (target != null && !target.isActive()) {
             destination.set(target.position);
             if (position.dst(target.position) < 240.0f) {
                 destination.set(position);
@@ -162,7 +162,6 @@ public class Tank extends GameObject implements Poolable {
         }
         batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
         batch.draw(weaponsTextures[weapon.getType().getImageIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, weapon.getAngle());
-
         batch.setColor(1, 1, 1, 1);
         if (weapon.getType() == Weapon.Type.HARVEST && weapon.getUsageTimePercentage() > 0.0f) {
             batch.setColor(0.2f, 0.2f, 0.0f, 1.0f);
@@ -188,5 +187,9 @@ public class Tank extends GameObject implements Poolable {
             srcAngle -= 360.0f;
         }
         return srcAngle;
+    }
+
+    public void getDamage (int damage) {
+        hp = hp - damage;
     }
 }

@@ -4,14 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GameController {
     private BattleMap map;
@@ -76,6 +73,19 @@ public class GameController {
                     t2.moveBy(tmp);
                     tmp.scl(-1);
                     t1.moveBy(tmp);
+                }
+            }
+        }
+        for (int i = 0; i < tanksController.activeSize(); i++) {
+            Tank t3 = tanksController.getActiveList().get(i);
+            for (int j = 0; j < projectilesController.getActiveList().size(); j++) {
+                Projectile p1 = projectilesController.getActiveList().get(j);
+                float dst = p1.getPosition().dst(t3.getPosition());
+                if (dst < 30) {
+                    if (t3.getOwnerType() == Tank.Owner.AI) {
+                        p1.deactivate();
+                        t3.getDamage(50);
+                    }
                 }
             }
         }
