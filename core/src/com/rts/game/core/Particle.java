@@ -1,6 +1,7 @@
 package com.rts.game.core;
 
 import com.badlogic.gdx.math.Vector2;
+import com.rts.game.core.interfaces.Poolable;
 
 public class Particle implements Poolable {
     private Vector2 position;

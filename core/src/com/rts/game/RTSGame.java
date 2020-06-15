@@ -2,35 +2,43 @@ package com.rts.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rts.game.screens.GameScreen;
+import com.rts.game.screens.ScreenManager;
+
+import java.io.*;
 
 public class RTSGame extends Game {
     private SpriteBatch batch;
-    private GameScreen gameScreen;
-
-    // Список идей:
-    // - Добавить управления группами танков
-    // - Добавить столкновения
-    // - Добавить боевые танки и стрельбу
 
     // Домашнее задание:
-    // 1. Разбор кода, в домашке задавайте вопросы что не ясно
-    // 2. Выбор активного танка, управление ведется только активным
-    // 3. Рядом с танком должна отрисовываться загруженность контейнера
-    // 4. Ограничить размер контейнера 50 единицами
-    // 5. * Реализовать столкновения, танки не могут заезжать друг в друга
+    // 1. Разобраться с кодом
+    // 2. Харвестеры AI должны собирать ресурсы и отвозить на базу
+
+    /*
+    1)  Уменьшить танки и харвестеры
+2)  Поиск оптимального маршрута
+3)  Поставить точки базы и выдать изначально допустим по 1 билдеру\харвестеру(появление привязать к базе
+4)  Добавить новый тип Билдеры ( тип строители)
+5)  Возможность билдерами возводить здания
+6)  Добавить постройку нескольких зданий(пункта приема ресурсов(можно считать основной базой как в старкрафте), казарму для постройки танков, харвестеры строить на базе)
+7)  Прикрутить минимальный интерфейс при выборе билдера (снизу появляется панелька с возможными постройками)
+     */
 
     @Override
     public void create() {
-        this.batch = new SpriteBatch();
-        this.gameScreen = new GameScreen(batch);
-        this.setScreen(gameScreen);
+        batch = new SpriteBatch();
+        ScreenManager.getInstance().init(this, batch);
+        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
     }
 
     @Override
     public void render() {
-        getScreen().render(Gdx.graphics.getDeltaTime());
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        float dt = Gdx.graphics.getDeltaTime();
+        getScreen().render(dt);
     }
 
     @Override

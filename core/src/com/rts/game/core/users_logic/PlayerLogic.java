@@ -1,35 +1,23 @@
-package com.rts.game.core;
+package com.rts.game.core.users_logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.rts.game.core.BattleMap;
+import com.rts.game.core.Building;
+import com.rts.game.core.GameController;
 import com.rts.game.core.units.AbstractUnit;
-import com.rts.game.core.units.BattleTank;
-import com.rts.game.core.units.Owner;
-import com.rts.game.core.units.UnitType;
+import com.rts.game.core.units.types.Owner;
+import com.rts.game.core.units.types.UnitType;
 
-public class PlayerLogic {
-    private GameController gc;
-    private int money;
-    private int unitsCount;
-    private int unitsMaxCount;
+import javax.imageio.stream.ImageOutputStream;
 
-    public int getMoney() {
-        return money;
-    }
-
-    public int getUnitsCount() {
-        return unitsCount;
-    }
-
-    public int getUnitsMaxCount() {
-        return unitsMaxCount;
-    }
-
+public class PlayerLogic extends BaseLogic {
     public PlayerLogic(GameController gc) {
         this.gc = gc;
         this.money = 1000;
         this.unitsCount = 10;
         this.unitsMaxCount = 100;
+        this.ownerType = Owner.PLAYER;
     }
 
     public void update(float dt) {
@@ -45,16 +33,25 @@ public class PlayerLogic {
 
     public void unitProcessing(AbstractUnit unit) {
         if (unit.getUnitType() == UnitType.HARVESTER) {
-            unit.commandMoveTo(gc.getMouse());
+            unit.commandMoveTo(gc.getMouse(), true);
             return;
         }
         if (unit.getUnitType() == UnitType.BATTLE_TANK) {
             AbstractUnit aiUnit = gc.getUnitsController().getNearestAiUnit(gc.getMouse());
-            if (aiUnit == null) {
-                unit.commandMoveTo(gc.getMouse());
-            } else {
+            if (aiUnit != null) {
                 unit.commandAttack(aiUnit);
+                return;
             }
+
+            int mouseCellX = (int) (gc.getMouse().x / BattleMap.CELL_SIZE);
+            int mouseCellY = (int) (gc.getMouse().y / BattleMap.CELL_SIZE);
+            Building b = gc.getMap().getBuildingFromCell(mouseCellX, mouseCellY);
+            if (b != null) {
+                unit.commandAttack(b);
+                return;
+            }
+            unit.commandMoveTo(gc.getMouse(), true);
+
         }
     }
 }

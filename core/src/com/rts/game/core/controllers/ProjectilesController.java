@@ -1,9 +1,13 @@
-package com.rts.game.core;
+package com.rts.game.core.controllers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.rts.game.core.GameController;
+import com.rts.game.core.utils.ObjectPool;
+import com.rts.game.core.Projectile;
 import com.rts.game.core.units.AbstractUnit;
+import com.rts.game.screens.utils.Assets;
 
 public class ProjectilesController extends ObjectPool<Projectile> {
     private GameController gc;

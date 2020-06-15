@@ -1,10 +1,11 @@
-package com.rts.game.core;
+package com.rts.game.core.controllers;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.rts.game.core.utils.ObjectPool;
+import com.rts.game.core.Particle;
+import com.rts.game.screens.utils.Assets;
 
 public class ParticleController extends ObjectPool<Particle> {
     private TextureRegion oneParticle;

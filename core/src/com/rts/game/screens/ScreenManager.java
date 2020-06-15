@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.*;
 import com.rts.game.RTSGame;
-import com.rts.game.core.Assets;
+import com.rts.game.screens.utils.Assets;
 
 public class ScreenManager {
     public enum ScreenType {

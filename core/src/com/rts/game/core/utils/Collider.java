@@ -1,7 +1,9 @@
-package com.rts.game.core;
+package com.rts.game.core.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.rts.game.core.GameController;
+import com.rts.game.core.Projectile;
 import com.rts.game.core.units.AbstractUnit;
 import com.rts.game.core.units.BattleTank;
 
@@ -36,7 +38,7 @@ public class Collider {
             Projectile p = gc.getProjectilesController().getActiveList().get(i);
             for (int j = 0; j < gc.getUnitsController().getUnits().size(); j++) {
                 AbstractUnit u = gc.getUnitsController().getUnits().get(j);
-                if (p.getOwner() != u && p.getPosition().dst(u.getPosition()) < 30) {
+                if (p.getOwner().getBaseLogic() != u.getBaseLogic() && p.getPosition().dst(u.getPosition()) < 30) {
                     for (int k = 0; k < 25; k++) {
                         tmp.set(p.getVelocity()).nor().scl(120.0f).add(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
                         gc.getParticleController().setup(

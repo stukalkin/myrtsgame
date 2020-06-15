@@ -1,4 +1,4 @@
-package com.rts.game.core;
+package com.rts.game.screens.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;

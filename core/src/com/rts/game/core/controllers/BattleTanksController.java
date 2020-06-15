@@ -1,11 +1,10 @@
-package com.rts.game.core;
+package com.rts.game.core.controllers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.rts.game.core.GameController;
+import com.rts.game.core.utils.ObjectPool;
 import com.rts.game.core.units.BattleTank;
-import com.rts.game.core.units.Owner;
+import com.rts.game.core.users_logic.BaseLogic;
 
 public class BattleTanksController extends ObjectPool<BattleTank> {
     private GameController gc;
@@ -25,9 +24,9 @@ public class BattleTanksController extends ObjectPool<BattleTank> {
         }
     }
 
-    public void setup(float x, float y, Owner ownerType) {
+    public void setup(float x, float y, BaseLogic baseLogic) {
         BattleTank t = activateObject();
-        t.setup(ownerType, x, y);
+        t.setup(baseLogic, x, y);
     }
 
     public void update(float dt) {

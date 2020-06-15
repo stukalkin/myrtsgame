@@ -1,4 +1,6 @@
-package com.rts.game.core;
+package com.rts.game.core.utils;
+
+import com.rts.game.core.interfaces.Poolable;
 
 import java.util.ArrayList;
 import java.util.List;
